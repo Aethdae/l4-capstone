@@ -28,18 +28,6 @@ def get_world():
 
         return {"data": continents}
 
-@app.post("/api/world")
-def add_content():
-    req = request.json
-    cities = req.get("cities")
-    if cities:
-        cities_json = Json(cities)
-        with Session(engine) as session:
-            session.execute(text("INSERT INTO continents (name, cities) VALUES (:name, :cities)"), {"name": req.get("name"), "cities": cities_json})
-            session.commit()
-            return {"ph": "ph"}, 201
-    
-    return {"ph": "pddddd"}, 415
 
 @app.post("/api/world/continent")
 def add_continent():
