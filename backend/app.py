@@ -16,17 +16,38 @@ def home():
 @app.get("/api/world")
 def get_world():
     with Session(engine) as session:
-        types = ["name", "cities"]
-        data = session.execute(text("SELECT name, cities FROM continents")).all()
+        continents = session.execute(text("SELECT name FROM continents")).all()
+        cities = session.execute(text("SELECT name FROM cities")).all()
+        
+        #Each continent is a tuple with one value, gettings the index of the tuple then the value
+        #probably a better way? but this is all I can see for now for python
+        #I could modify asdict() here too, but this works for getting all
+        continents_ret = [continents[i][0] for i in range(len(continents))]
+        cities_ret = [cities[i][0] for i in range(len(cities))]
 
-        continents = {}
-        for continent in data:
-            curr_cont = {}
-            for i in range(len(continent)):
-                curr_cont[types[i]] = continent[i]
-            continents[curr_cont["name"]] = curr_cont["cities"]
+        return {"continents": continents_ret, "cities": cities_ret}, 200
 
-        return {"data": continents}
+@app.get("/api/cities")
+def get_cities():
+    with Session(engine) as session:
+        types = ["name", "interest_areas"]
+        cities = session.execute(text("SELECT name, interest_areas FROM cities")).all()
+
+        #There was a better way
+        new_cities_ret = [city._asdict() for city in cities]
+        print(new_cities_ret)
+
+        #Same issue as above, feels a bit magic numbery
+        #Likely a better conversion to json that I didn't see
+        # cities_ret = []
+        # for i in range(len(cities)):
+        #     curr_city = {}
+        #     for j in range(len(types)):
+        #         curr_city[types[j]] = cities[i][j]
+
+        #     cities_ret.append(curr_city)
+
+        return {"cities": new_cities_ret}
 
 
 @app.post("/api/world/continent")
@@ -55,8 +76,31 @@ def add_city():
                 return {"error": f"Continent with name: {req.get("continent_name")} not found."}, 404
             
     return {"error": "Missing name from continent"}, 415
-        
 
+@app.get("/api/world/<string:get_cont>")
+def direct_to_continent(get_cont):
+    with Session(engine) as session:
+        continent = session.execute(text("SELECT id, name FROM continents WHERE name = :name"), {"name": get_cont}).first()
+        if continent:
+            continent = continent._asdict()
+            cities = session.execute(text("SELECT name FROM cities WHERE continent_id = :id"), {"id": continent["id"]}).all()
+            cities_ret = [cities[i][0] for i in range(len(cities))]
+
+            return {"continent": continent["name"], "continent_id": continent["id"], "cities": cities_ret}, 200
+        
+        return {"error": f"Continent with name: {get_cont} not found."}, 404
+        
+@app.get("/api/world/<string:get_city>")
+def direct_to_continent(get_city):
+    with Session(engine) as session:
+        city = session.execute(text("SELECT id, name, interest_areas FROM cities WHERE name = :name"), {"name": get_city}).first()
+
+        if city:
+            city = city._asdict()
+            return {"city": city["name"], "id": city["id"], "interest_areas": city["interest_areas"]}, 200
+        
+        return {"error": f"City with name: {get_city} not found."}, 404
+        
 
 if __name__ == "__main__":
     app.run(port=10000, host="0.0.0.0")
