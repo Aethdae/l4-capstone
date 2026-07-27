@@ -49,7 +49,7 @@ def get_cities():
 
         return {"cities": new_cities_ret}
 
-
+#requires name, optional info
 @app.post("/api/world/continent")
 def add_continent():
     req = request.json
@@ -77,7 +77,7 @@ def add_city():
             
     return {"error": "Missing name from continent"}, 415
 
-@app.get("/api/world/<string:get_cont>")
+@app.get("/api/world/continents/<string:get_cont>")
 def direct_to_continent(get_cont):
     with Session(engine) as session:
         continent = session.execute(text("SELECT id, name FROM continents WHERE name = :name"), {"name": get_cont}).first()
@@ -90,8 +90,8 @@ def direct_to_continent(get_cont):
         
         return {"error": f"Continent with name: {get_cont} not found."}, 404
         
-@app.get("/api/world/<string:get_city>")
-def direct_to_continent(get_city):
+@app.get("/api/world/cities/<string:get_city>")
+def direct_to_city(get_city):
     with Session(engine) as session:
         city = session.execute(text("SELECT id, name, interest_areas FROM cities WHERE name = :name"), {"name": get_city}).first()
 
