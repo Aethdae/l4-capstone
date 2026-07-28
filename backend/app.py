@@ -100,6 +100,8 @@ def direct_to_city(get_city):
             return {"city": city["name"], "id": city["id"], "interest_areas": city["interest_areas"]}, 200
         
         return {"error": f"City with name: {get_city} not found."}, 404
+
+# TODO add extra routes for NPCs, add NPCs to cities, could be a patch route for cities to add them, same with continents.
         
 
 if __name__ == "__main__":
