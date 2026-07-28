@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, Links } from "react-router";
 import { mainNavButtonClasses } from "../../helpers/htmlClasses";
 
 export default function Navbar() {
@@ -14,6 +14,9 @@ export default function Navbar() {
         </Link>
         <Link className={mainNavButtonClasses.join(" ")} to={"/cities"}>
           Cities
+        </Link>
+        <Link className={mainNavButtonClasses.join(" ")} to={"/npcs"}>
+          NPCs
         </Link>
         <Link className={mainNavButtonClasses.join(" ")} to={"/management"}>
           Manage

@@ -7,6 +7,7 @@ import City from "./components/navigation/City";
 import Footer from "./components/navigation/Footer";
 import Cities from "./components/navigation/Cities";
 import WorldManager from "./components/management/WorldManager";
+import Npcs from "./components/navigation/Npcs";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
             path="/api/world/cities/:city"
             element={<City city={"city"} />}
           />
+          <Route path="/npcs" element={<Npcs />} />
           <Route path="/cities" element={<Cities />} />
           <Route path="/continents" element={<Continents />} />
           <Route path="/management" element={<WorldManager />} />
