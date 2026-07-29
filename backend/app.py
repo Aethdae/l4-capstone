@@ -30,7 +30,7 @@ def get_world():
 @app.get("/api/continents")
 def get_continents():
     with Session(engine) as session:
-        continents = session.execute(text("SELECT name, info FROM continents")).all()
+        continents = session.execute(text("SELECT name, info, id FROM continents")).all()
 
         continents_ret = [continent._asdict() for continent in continents]
 
@@ -40,7 +40,7 @@ def get_continents():
 def get_cities():
     with Session(engine) as session:
         types = ["name", "interest_areas"]
-        cities = session.execute(text("SELECT name, interest_areas FROM cities")).all()
+        cities = session.execute(text("SELECT name, interest_areas, id FROM cities")).all()
 
         #There was a better way
         new_cities_ret = [city._asdict() for city in cities]
@@ -61,7 +61,7 @@ def get_cities():
 @app.get("/api/npcs")
 def get_npcs():
     with Session(engine) as session:
-        npcs = session.execute(text("SELECT name, info, city_id FROM npcs")).all()
+        npcs = session.execute(text("SELECT name, info, city_id, id FROM npcs")).all()
 
         npcs_ret = [npc._asdict() for npc in npcs]
         return {"npcs": npcs_ret}
@@ -110,7 +110,7 @@ def add_npc():
             
     return {"error": "Missing name from continent"}, 415
 
-@app.get("/api/world/continents/<string:get_cont>")
+@app.get("/api/continents/<string:get_cont>")
 def direct_to_continent(get_cont):
     with Session(engine) as session:
         continent = session.execute(text("SELECT id, name FROM continents WHERE name = :name"), {"name": get_cont}).first()
@@ -119,20 +119,42 @@ def direct_to_continent(get_cont):
             cities = session.execute(text("SELECT name FROM cities WHERE continent_id = :id"), {"id": continent["id"]}).all()
             cities_ret = [cities[i][0] for i in range(len(cities))]
 
-            return {"continent": continent["name"], "continent_id": continent["id"], "cities": cities_ret}, 200
+            return {"continent": {"name": continent["name"], "continent_id": continent["id"], "cities": cities_ret}}, 200
         
         return {"error": f"Continent with name: {get_cont} not found."}, 404
         
-@app.get("/api/world/cities/<string:get_city>")
+@app.get("/api/cities/<string:get_city>")
 def direct_to_city(get_city):
     with Session(engine) as session:
-        city = session.execute(text("SELECT id, name, interest_areas FROM cities WHERE name = :name"), {"name": get_city}).first()
+        print(get_city)
+        city = session.execute(text("SELECT id, name, interest_areas, continent_id FROM cities WHERE name = :name"), {"name": get_city}).first()
 
         if city:
             city = city._asdict()
-            return {"city": city["name"], "id": city["id"], "interest_areas": city["interest_areas"]}, 200
+
+            continent = session.execute(text("SELECT name FROM continents WHERE id = :id"), {"id": city["continent_id"]}).first()._asdict()
+            
+            npcs = session.execute(text("SELECT name FROM npcs WHERE city_id = :id"), {"id": city["id"]}).all()
+            npcs_ret = [npc._asdict() for npc in npcs]
+
+            return {"city": {"name": city["name"], "id": city["id"], "continent": continent["name"], "interest_areas": city["interest_areas"]}, "npcs": npcs_ret}, 200
         
         return {"error": f"City with name: {get_city} not found."}, 404
+
+
+@app.get("/api/npcs/<string:get_npc>")
+def direct_to_npc(get_npc):
+    with Session(engine) as session:
+        npc = session.execute(text("SELECT id, name, info, city_id FROM npcs WHERE name = :name"), {"name": get_npc}).first()
+        
+
+        if npc:
+            npc = npc._asdict()
+            city = session.execute(text("SELECT name FROM cities WHERE id = :id"), {"id": npc["city_id"]}).first()._asdict()
+            npc["city"] = city["name"]
+            return {"result": "success", "npc": npc }, 200
+        
+        return {"error": f"City with name: {get_npc} not found."}, 404
 
 # TODO add extra routes for NPCs, add NPCs to cities, could be a patch route for cities to add them, same with continents.
         

@@ -1,5 +1,9 @@
 import React from "react";
 
-export default function ContinentCard() {
-  return <div>ContinentCard</div>;
+export default function ContinentCard({ continent }) {
+  return (
+    <div>
+      <p>{continent?.name}</p>
+    </div>
+  );
 }

@@ -20,10 +20,10 @@ export default function Npcs() {
     getNpcs();
   }, []);
   return (
-    <div className="grid grid-cols-3 gap-2 min-h-[90vh] z-10 justify-center items-center bg-black w-[80vw] [border-style:groove] mx-auto border-4 border-white">
-      {npcs.map((npc) => (
-        <NpcCard key={npc.id} npc={npc} />
-      ))}
+    <div className="grid grid-cols-3 gap-2 min-h-[90vh] z-10 p-4 justify-center items-center bg-black w-[80vw] [border-style:groove] mx-auto border-4 border-white">
+      {npcs.map((npc) => {
+        return <NpcCard key={npc.id} npc={npc} />;
+      })}
     </div>
   );
 }
