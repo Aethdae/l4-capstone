@@ -18,8 +18,11 @@ export default function WorldManagerButton({ onClick, type, currActive }) {
       className={
         currActive === type
           ? managerNavButtonActiveClasses.join(" ") +
+            " " +
             transitionClasses.join(" ")
-          : managerNavButtonClasses.join(" ") + transitionClasses.join(" ")
+          : managerNavButtonClasses.join(" ") +
+            " " +
+            transitionClasses.join(" ")
       }
     >
       {type == States.CITY && "City"}

@@ -9,7 +9,7 @@ export default function WorldManagerButtons({
   currActive,
 }) {
   return (
-    <nav className="flex gap-4 -mb-1">
+    <nav className="flex gap-4 w-[50vw] ml-4 -mb-1">
       <WorldManagerButton
         onClick={onContinent}
         type={States.CONTINENT}

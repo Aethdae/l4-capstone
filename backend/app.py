@@ -26,6 +26,15 @@ def get_world():
         cities_ret = [cities[i][0] for i in range(len(cities))]
 
         return {"continents": continents_ret, "cities": cities_ret}, 200
+    
+@app.get("/api/continents")
+def get_continents():
+    with Session(engine) as session:
+        continents = session.execute(text("SELECT name, info FROM continents")).all()
+
+        continents_ret = [continent._asdict() for continent in continents]
+
+        return {"continents": continents_ret}, 200
 
 @app.get("/api/cities")
 def get_cities():
@@ -35,7 +44,6 @@ def get_cities():
 
         #There was a better way
         new_cities_ret = [city._asdict() for city in cities]
-        print(new_cities_ret)
 
         #Same issue as above, feels a bit magic numbery
         #Likely a better conversion to json that I didn't see
@@ -48,6 +56,15 @@ def get_cities():
         #     cities_ret.append(curr_city)
 
         return {"cities": new_cities_ret}
+
+
+@app.get("/api/npcs")
+def get_npcs():
+    with Session(engine) as session:
+        npcs = session.execute(text("SELECT name, info, city_id FROM npcs")).all()
+
+        npcs_ret = [npc._asdict() for npc in npcs]
+        return {"npcs": npcs_ret}
 
 #requires name, optional info
 @app.post("/api/world/continent")
@@ -69,11 +86,27 @@ def add_city():
         with Session(engine) as session:
             continent_id = session.execute(text("SELECT id FROM continents WHERE name = :name"), {"name": req.get("continent_name")}).first()
             if continent_id:
-                session.execute(text("INSERT INTO cities (name, interest_areas, continent_id) VALUES (:name, :interest_areas, :continent_id)"), {"name": req.get("name"), "interest_areas": Json(req.get("interest_areas", [])), "continent_id": continent_id})
+                session.execute(text("INSERT INTO cities (name, interest_areas, continent_id) VALUES (:name, :interest_areas, :continent_id)"), {"name": req.get("name"), "interest_areas": Json(req.get("interest_areas", [])), "continent_id": continent_id[0]})
                 session.commit()
-                return {"status":"created"}, 201
+                return {"status":"created", "city": {"name": req.get("name"), "interest_areas": req.get("interest_areas", ""), "continent": req.get("continent_name")}}, 201
             else: 
                 return {"error": f"Continent with name: {req.get("continent_name")} not found."}, 404
+            
+    return {"error": "Missing name from continent"}, 415
+
+#requires name, continent_name, optional interest_areas
+@app.post("/api/world/npcs")
+def add_npc():
+    req = request.json
+    if req.get("name"):
+        with Session(engine) as session:
+            city_id = session.execute(text("SELECT id FROM cities WHERE name = :name"), {"name": req.get("city_name")}).first()
+            if city_id:
+                session.execute(text("INSERT INTO npcs (name, info, city_id) VALUES (:name, :info, :city_id)"), {"name": req.get("name"), "info": Json(req.get("info", "")), "city_id": city_id[0]})
+                session.commit()
+                return {"status":"created", "npc": {"name": req.get("name"), "info": req.get("info", ""), "city": req.get("city_name")}}, 201
+            else: 
+                return {"error": f"Continent with name: {req.get("city_name")} not found."}, 404
             
     return {"error": "Missing name from continent"}, 415
 

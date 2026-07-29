@@ -1,5 +1,28 @@
-export const mainNavButtonClasses = [
-  "bg-blue-400",
+export const formLabelClasses = [
+  "flex",
+  "gap-4",
+  "items-center",
+  "justify-between",
+  "text-lg",
+  "font-bold",
+];
+
+export const formSelectClasses = ["bg-black", "text-white", "mx-auto"];
+
+export const textFormInputClasses = [
+  "bg-gray-400",
+  "active:border-white",
+  "border-2",
+  "hover:border-gray-200",
+  "text-black",
+  "text-lg",
+  "px-2",
+  "py-2",
+  "font-normal",
+];
+
+export const formSubmitButtonClasses = [
+  "bg-gray-800",
   "text-3xl",
   "border-2",
   "border-white",
@@ -7,6 +30,19 @@ export const mainNavButtonClasses = [
   "px-4",
   "py-2",
   "cursor-pointer",
+];
+
+export const mainNavButtonClasses = [
+  "bg-gray-900",
+  "text-3xl",
+  "border-2",
+  "border-white",
+  "rounded-xl",
+  "px-4",
+  "py-2",
+  "cursor-pointer",
+  "hover:border-gray-100",
+  "hover:bg-gray-700",
 ];
 
 export const footerClasses = [
@@ -20,10 +56,11 @@ export const managerNavButtonClasses = [
   "bg-black",
   "text-3xl",
   "border-8",
-  "z-20",
+  "z-00",
   "[border-top-style:groove]",
   "[border-right-style:groove]",
   "[border-left-style:groove]",
+  "[border-bottom-style:none]",
   "border-gray-600",
   "border-l-white",
   "border-r-gray-800/50",
@@ -31,7 +68,12 @@ export const managerNavButtonClasses = [
   "px-4",
   "py-2",
   "cursor-pointer",
-  "hover:bg-[#111]",
+  "outline-0",
+  "[outline-style:ridge]",
+  "hover:bg-[#333]",
+  "hover:outline-4",
+  "hover:outline-white",
+  "active:bg-[#555]",
 ];
 
 export const managerNavButtonActiveClasses = [
@@ -43,14 +85,42 @@ export const managerNavButtonActiveClasses = [
   "[border-top-style:groove]",
   "[border-right-style:groove]",
   "[border-left-style:groove]",
+  "[border-bottom-style:none]",
   "border-gray-600",
   "border-l-white",
-  "border-r-gray-800/50",
-  "border-b-transparent",
+  "border-t-gray-100",
+  "border-r-gray-200",
   "px-4",
   "py-2",
   "cursor-pointer",
-  "hover:bg-[#AAA]",
+  "outline-0",
+  "hover:bg-[#CCC]",
+  "active:bg-[#EEE]",
 ];
 
 export const transitionClasses = ["transition", "duration-100"];
+
+export const baseCardClasses = [
+  "flex",
+  "flex-col",
+  "gap-2",
+  "items-center",
+  "bg-gray-800/90",
+  "border-white",
+  "border-2",
+  "rounded-2xl",
+  "p-20",
+];
+
+export const formContainerClasses = [
+  "flex",
+  "flex-col",
+  "justify-around",
+  "min-h-[90vh]",
+  "bg-black",
+  "w-[50vw]",
+  "items-center",
+  "[border-style:groove]",
+  "border-4",
+  "border-white",
+];
