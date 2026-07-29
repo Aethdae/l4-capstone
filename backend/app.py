@@ -39,8 +39,7 @@ def get_continents():
 @app.get("/api/cities")
 def get_cities():
     with Session(engine) as session:
-        types = ["name", "interest_areas"]
-        cities = session.execute(text("SELECT name, interest_areas, id FROM cities")).all()
+        cities = session.execute(text("SELECT name, interest_areas, id, info FROM cities")).all()
 
         #There was a better way
         new_cities_ret = [city._asdict() for city in cities]

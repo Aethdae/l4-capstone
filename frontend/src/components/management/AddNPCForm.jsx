@@ -41,7 +41,6 @@ export default function AddNPCForm({ setCreated, itemCreated }) {
         throw new Error("Error adding NPC.");
       }
       const data = await res.json();
-      console.log(data);
       setCreated(data.npc);
     } catch (error) {
       console.error(error);

@@ -25,7 +25,6 @@ export default function Continent() {
   }, []);
   return (
     <div>
-      {console.log(cont)}
       <ContinentCard continent={cont} inDepth={true} />
     </div>
   );

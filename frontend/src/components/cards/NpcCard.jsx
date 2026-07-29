@@ -9,14 +9,13 @@ export default function NpcCard({ npc, inDepth }) {
       onClick={() => navigate(`/npcs/${npc?.name}`)}
       className={baseCardClasses.join(" ")}
     >
-      {console.log(npc)}
-      <h2 className="text-4xl text-white font-bold">
+      <h2 className="text-4xl bg-white text-black border border-black px-4 py-2">
         {npc?.name || "Loading..."}
       </h2>
       <p className="text-2xl text-white">
         Info: {npc.info?.replaceAll('"', "")}
       </p>
-      <p className="text-2xl text-white">City: {npc?.city}</p>
+      {inDepth && <p className="text-2xl text-white">City: {npc?.city}</p>}
     </div>
   );
 }
