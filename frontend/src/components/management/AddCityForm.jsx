@@ -10,14 +10,24 @@ import {
 import { upperFirstLetter } from "../../helpers/helperFunctions";
 
 export default function AddCityForm({ setCreated, itemCreated }) {
+  const intAreas = useRef([""]);
+  const intElements = [];
   const [continents, setContinents] = useState([]);
   const [name, setName] = useState("");
   const [selectedContinent, setSelectedContinent] = useState("");
+  const [renderState, setRenderState] = useState("");
   const [interestAreaElements, setInterestAreaElements] = useState([{}]);
-  const interestAreas = useRef([{ value: "" }]);
+
   useEffect(() => {
     getContinents();
   }, []);
+
+  useEffect(() => {
+    intElements.forEach((element, i) => {
+      document.getElementById(element).value = intAreas.current[i] || "";
+    });
+  }, [renderState]);
+
   async function getContinents() {
     try {
       const res = await fetch(FLASK_GET_CONTINENTS_URL);
@@ -29,21 +39,25 @@ export default function AddCityForm({ setCreated, itemCreated }) {
   }
   function handleAreaChange(e, index) {
     e.preventDefault();
-    interestAreas.current[index].value = e.target.value;
-    setInterestAreaElements(() => [...interestAreaElements]);
+    intAreas.current[index] = e.target.value;
   }
   function addInterestArea() {
-    setInterestAreaElements(() => [...interestAreaElements, {}]);
-    interestAreas.current = [...interestAreas.current, { value: "" }];
-    return false;
+    setInterestAreaElements(() => [...interestAreaElements, { area: "" }]);
   }
-  async function handleSubmitForm() {}
+  async function handleSubmitForm(e) {
+    e.preventDefault();
+    console.log("Submitted nothing atm PH", {
+      name,
+      selectedContinent,
+      intAreas,
+    });
+  }
 
   return (
     <section className={formContainerClasses.join(" ")}>
       <form
         onSubmit={(e) => {
-          e.preventDefault();
+          handleSubmitForm(e);
         }}
         className="flex flex-col gap-4"
       >
@@ -57,24 +71,34 @@ export default function AddCityForm({ setCreated, itemCreated }) {
             id="name"
             value={name}
             onChange={(e) => {
-              setName(e.target.value);
+              setName((prev) => e.target.value);
+              setRenderState(crypto.randomUUID());
             }}
           ></input>
         </label>
-        {interestAreaElements.map((area, i) => (
-          <label
-            key={crypto.randomUUID()}
-            className={formLabelClasses.join(" ")}
-          >
-            Area
-            <input
-              className={textFormInputClasses.join(" ")}
-              type="text"
-              name={"name-" + i}
-              id={"name-" + i}
-            ></input>
-          </label>
-        ))}
+        {interestAreaElements.map((item, i) => {
+          if (!intElements.includes("area-" + i)) {
+            intElements.push("area-" + i);
+          }
+          return (
+            <label
+              key={crypto.randomUUID()}
+              className={formLabelClasses.join(" ")}
+            >
+              Area
+              <input
+                className={textFormInputClasses.join(" ")}
+                type="text"
+                name={"area-" + i}
+                id={"area-" + i}
+                onChange={(e) => {
+                  e.preventDefault();
+                  handleAreaChange(e, i);
+                }}
+              ></input>
+            </label>
+          );
+        })}
         <label className={formLabelClasses.join(" ")}>
           City
           <select
@@ -82,6 +106,7 @@ export default function AddCityForm({ setCreated, itemCreated }) {
             value={selectedContinent}
             onChange={(e) => {
               setSelectedContinent(e.target.value);
+              setRenderState(crypto.randomUUID());
             }}
             name="city"
             id="city"
@@ -97,8 +122,8 @@ export default function AddCityForm({ setCreated, itemCreated }) {
         <button
           type="button"
           onClick={(e) => {
-            e.preventDefault();
             addInterestArea();
+            setRenderState(crypto.randomUUID());
           }}
         >
           Add area
