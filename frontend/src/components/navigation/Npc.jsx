@@ -23,7 +23,7 @@ export default function Npc() {
   }, []);
   return (
     <div>
-      <NpcCard npc={npc} />
+      <NpcCard npc={npc} inDepth={true} />
     </div>
   );
 }

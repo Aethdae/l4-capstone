@@ -1,9 +1,12 @@
 import React from "react";
 
-export default function ContinentCard({ continent }) {
+export default function ContinentCard({ continent, inDepth }) {
   return (
-    <div>
-      <p>{continent?.name}</p>
+    <div
+      onClick={() => navigate(`/continents/${continent?.name}`)}
+      className={baseCardClasses.join(" ")}
+    >
+      <h2>{continent?.name || "Loading..."}</h2>
     </div>
   );
 }

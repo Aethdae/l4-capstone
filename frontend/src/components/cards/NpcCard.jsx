@@ -1,17 +1,22 @@
 import React from "react";
 import { baseCardClasses } from "../../helpers/htmlClasses";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
-export default function NpcCard({ npc }) {
+export default function NpcCard({ npc, inDepth }) {
+  const navigate = useNavigate();
   return (
-    <div className={baseCardClasses.join(" ")}>
+    <div
+      onClick={() => navigate(`/npcs/${npc?.name}`)}
+      className={baseCardClasses.join(" ")}
+    >
       {console.log(npc)}
-      <p className="text-4xl text-white font-bold">{npc?.name}</p>
+      <h2 className="text-4xl text-white font-bold">
+        {npc?.name || "Loading..."}
+      </h2>
       <p className="text-2xl text-white">
         Info: {npc.info?.replaceAll('"', "")}
       </p>
       <p className="text-2xl text-white">City: {npc?.city}</p>
-      <Link to={`/npcs/${npc?.name}`}>test</Link>
     </div>
   );
 }

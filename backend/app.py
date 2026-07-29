@@ -86,9 +86,9 @@ def add_city():
         with Session(engine) as session:
             continent_id = session.execute(text("SELECT id FROM continents WHERE name = :name"), {"name": req.get("continent_name")}).first()
             if continent_id:
-                session.execute(text("INSERT INTO cities (name, interest_areas, continent_id) VALUES (:name, :interest_areas, :continent_id)"), {"name": req.get("name"), "interest_areas": Json(req.get("interest_areas", [])), "continent_id": continent_id[0]})
+                session.execute(text("INSERT INTO cities (name, interest_areas, continent_id, info) VALUES (:name, :interest_areas, :continent_id, :info)"), {"name": req.get("name"), "interest_areas": Json(req.get("interest_areas", [])), "info": req.get("info", ""), "continent_id": continent_id[0]})
                 session.commit()
-                return {"status":"created", "city": {"name": req.get("name"), "interest_areas": req.get("interest_areas", ""), "continent": req.get("continent_name")}}, 201
+                return {"status":"created", "city": {"name": req.get("name"), "interest_areas": req.get("interest_areas", ""), "info": req.get("info", ""), "continent": req.get("continent_name")}}, 201
             else: 
                 return {"error": f"Continent with name: {req.get("continent_name")} not found."}, 404
             
@@ -127,7 +127,7 @@ def direct_to_continent(get_cont):
 def direct_to_city(get_city):
     with Session(engine) as session:
         print(get_city)
-        city = session.execute(text("SELECT id, name, interest_areas, continent_id FROM cities WHERE name = :name"), {"name": get_city}).first()
+        city = session.execute(text("SELECT id, name, interest_areas, continent_id, info FROM cities WHERE name = :name"), {"name": get_city}).first()
 
         if city:
             city = city._asdict()
@@ -137,7 +137,10 @@ def direct_to_city(get_city):
             npcs = session.execute(text("SELECT name FROM npcs WHERE city_id = :id"), {"id": city["id"]}).all()
             npcs_ret = [npc._asdict() for npc in npcs]
 
-            return {"city": {"name": city["name"], "id": city["id"], "continent": continent["name"], "interest_areas": city["interest_areas"]}, "npcs": npcs_ret}, 200
+            city["continent"] = continent["name"]
+            city["npcs"] = npcs_ret
+
+            return {"result": "success", "city": city}, 200
         
         return {"error": f"City with name: {get_city} not found."}, 404
 

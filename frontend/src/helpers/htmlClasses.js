@@ -110,6 +110,7 @@ export const baseCardClasses = [
   "border-2",
   "rounded-2xl",
   "p-20",
+  "cursor-pointer",
 ];
 
 export const formContainerClasses = [

@@ -23,7 +23,7 @@ export default function City() {
   }, []);
   return (
     <div>
-      <CityCard city={city} />
+      <CityCard city={city} inDepth={true} />
     </div>
   );
 }
