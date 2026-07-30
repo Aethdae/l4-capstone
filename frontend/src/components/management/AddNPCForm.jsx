@@ -41,7 +41,10 @@ export default function AddNPCForm({ setCreated, itemCreated }) {
         throw new Error("Error adding NPC.");
       }
       const data = await res.json();
-      setCreated(data.npc);
+      setCreated(() => data.npc);
+      setName(() => "");
+      setInfo(() => "");
+      setSelectedCity(() => "");
     } catch (error) {
       console.error(error);
     }
@@ -100,8 +103,8 @@ export default function AddNPCForm({ setCreated, itemCreated }) {
       </form>
       {!submitted && <div className="h-[30%]"></div>}
 
-      {itemCreated?.name && (
-        <div>
+      {itemCreated?.city && (
+        <div className="w-1/2">
           <h2 className="text-center text-3xl font-bold text-white">
             Created:
           </h2>

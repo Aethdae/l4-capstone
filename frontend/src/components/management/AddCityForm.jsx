@@ -1,13 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FLASK_GET_CONTINENTS_URL } from "../../helpers/consts";
+import {
+  FLASK_GET_CONTINENTS_URL,
+  FLASK_PUT_CITIES_URL,
+} from "../../helpers/consts";
 import {
   formContainerClasses,
   formLabelClasses,
   formSelectClasses,
   formSubmitButtonClasses,
+  mainNavButtonClasses,
   textFormInputClasses,
+  transitionClasses,
 } from "../../helpers/htmlClasses";
 import { upperFirstLetter } from "../../helpers/helperFunctions";
+import CityCard from "../cards/CityCard";
 
 export default function AddCityForm({ setCreated, itemCreated }) {
   const [continents, setContinents] = useState([]);
@@ -65,19 +71,40 @@ export default function AddCityForm({ setCreated, itemCreated }) {
 
   async function handleSubmitForm(e) {
     e.preventDefault();
-    console.log("Submitted nothing atm PH", {
-      name,
-    });
+    try {
+      const res = await fetch(FLASK_PUT_CITIES_URL, {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({
+          interest_areas: formState.interestAreas,
+          name: formState.name,
+          info: formState.info,
+          continent_name: formState.selectedContinent,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error("Error adding City.");
+      }
+      const data = await res.json();
+      setCreated(() => data.city);
+      setFormState(() => ({
+        name: "",
+        info: "",
+        selectedContinent: "",
+        interestAreas: [createInterestArea()],
+      }));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
     <section className={formContainerClasses.join(" ")}>
-      {console.log(formState)}
       <form
         onSubmit={(e) => {
           handleSubmitForm(e);
         }}
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-4 w-[60%]"
       >
         <label className={formLabelClasses.join(" ")}>
           Name
@@ -111,7 +138,8 @@ export default function AddCityForm({ setCreated, itemCreated }) {
         })}
         <label className={formLabelClasses.join(" ")}>
           Info
-          <input
+          <textarea
+            cols={40}
             className={textFormInputClasses.join(" ")}
             aria-required
             type="text"
@@ -119,7 +147,7 @@ export default function AddCityForm({ setCreated, itemCreated }) {
             id="info"
             value={formState.info}
             onChange={handleFormChange}
-          ></input>
+          ></textarea>
         </label>
         <label className={formLabelClasses.join(" ")}>
           Continent
@@ -127,8 +155,8 @@ export default function AddCityForm({ setCreated, itemCreated }) {
             className={formSelectClasses.join(" ")}
             value={formState.selectedContinent}
             onChange={handleFormChange}
-            name="continent"
-            id="continent"
+            name="selectedContinent"
+            id="selectedContinent"
           >
             <option value="">Select a continent</option>
             {continents.map((continent) => (
@@ -139,6 +167,11 @@ export default function AddCityForm({ setCreated, itemCreated }) {
           </select>
         </label>
         <button
+          className={
+            mainNavButtonClasses.join(" ") +
+            " self-center " +
+            transitionClasses.join(" ")
+          }
           type="button"
           onClick={(e) => {
             addInterestArea();
@@ -147,8 +180,24 @@ export default function AddCityForm({ setCreated, itemCreated }) {
           Add area
         </button>
 
-        <button className={formSubmitButtonClasses.join(" ")}>Add City</button>
+        <button
+          className={
+            formSubmitButtonClasses.join(" ") +
+            " " +
+            transitionClasses.join(" ")
+          }
+        >
+          Add City
+        </button>
       </form>
+      {itemCreated?.continent && (
+        <div className="w-1/2">
+          <h2 className="text-center text-3xl font-bold text-white">
+            Created:
+          </h2>
+          <CityCard city={itemCreated} />
+        </div>
+      )}
     </section>
   );
 }

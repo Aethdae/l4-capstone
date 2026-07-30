@@ -25,7 +25,7 @@ export default function Continent() {
   }, []);
   return (
     <div>
-      {continent.name?.length > 0 && (
+      {cont.name?.length > 0 && (
         <ContinentCard continent={cont} inDepth={true} />
       )}
     </div>

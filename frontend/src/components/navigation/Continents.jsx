@@ -8,7 +8,7 @@ import {
 
 export default function Continents() {
   const [conts, setConts] = useState([]);
-  async function getCities() {
+  async function getConts() {
     try {
       const res = await fetch(FLASK_GET_CONTINENTS_URL);
       if (!res.ok) {
@@ -21,7 +21,7 @@ export default function Continents() {
     }
   }
   useEffect(() => {
-    getCities();
+    getConts();
   }, []);
   return conts.length > 4 ? (
     <div className={cardContainerClasses.join(" ")}>

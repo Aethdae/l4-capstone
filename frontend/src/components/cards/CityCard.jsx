@@ -30,7 +30,7 @@ export default function CityCard({ city, inDepth }) {
           </h3>
           <ul className={ulListClasses.join(" ")}>
             {city.npcs?.map((npc) => (
-              <Link to={`/npcs/${npc.name}`}>
+              <Link key={crypto.randomUUID()} to={`/npcs/${npc.name}`}>
                 <li className={liListClasses.join(" ")}>{npc.name}</li>
               </Link>
             ))}

@@ -2,7 +2,7 @@ export const formLabelClasses = [
   "flex",
   "gap-4",
   "items-center",
-  "justify-between",
+  "justify-around",
   "text-lg",
   "font-bold",
 ];
@@ -30,6 +30,7 @@ export const formSubmitButtonClasses = [
   "px-4",
   "py-2",
   "cursor-pointer",
+  "hover:bg-gray-600",
 ];
 
 export const mainNavButtonClasses = [
@@ -98,7 +99,7 @@ export const managerNavButtonActiveClasses = [
   "active:bg-[#EEE]",
 ];
 
-export const transitionClasses = ["transition", "duration-100"];
+export const transitionClasses = ["transition-all", "duration-100"];
 
 export const baseCardClasses = [
   "flex",
@@ -150,6 +151,7 @@ export const cardContainerClasses = [
   "grid-cols-2",
   "min-h-[90vh]",
   "z-10",
+  "gap-4",
   "justify-center",
   "p-4",
   "items-center",
@@ -164,6 +166,7 @@ export const cardContainerClasses = [
 export const cardContainerClassesSmall = [
   "flex",
   "flex-col",
+  "gap-4",
   "mx-auto",
   "min-h-[90vh]",
   "z-10",

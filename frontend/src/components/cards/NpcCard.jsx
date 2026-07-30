@@ -21,11 +21,13 @@ export default function NpcCard({ npc, inDepth }) {
       <p className="text-2xl text-white">
         Info: {npc.info?.replaceAll('"', "")}
       </p>
-      <h3 className="text-2xl text-center w-full bg-gray-600">NPCs</h3>
       {inDepth && (
-        <Link to={`/cities/${npc.city}`}>
-          <p className="text-2xl text-white">City: {npc?.city}</p>
-        </Link>
+        <>
+          <h3 className="text-2xl text-center w-full bg-gray-600">NPCs</h3>
+          <Link to={`/cities/${npc.city}`}>
+            <p className="text-2xl text-white">City: {npc?.city}</p>
+          </Link>
+        </>
       )}
     </div>
   );

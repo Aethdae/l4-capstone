@@ -1,11 +1,11 @@
 from flask import Flask, request
 from flask_cors import CORS
-from sqlalchemy import create_engine, text, Result
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session
 from psycopg2.extras import Json
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["http://localhost:*", "http://127.0.0.1:*"])
 
 engine = create_engine("postgresql://pathfinder_world_user:UeXoSdrd1B47UxcC5DdUvl24lxnk7L7b@dpg-d9hunoo4n6ts73bj3i60-a.ohio-postgres.render.com/pathfinder_world")
 
@@ -73,11 +73,11 @@ def add_continent():
         with Session(engine) as session:
             session.execute(text("INSERT INTO continents (name, info) VALUES (:name, :info)"), {"name": req.get("name"), "info": req.get("info", None)})
             session.commit()
-            return {"status":"created"}, 201
+            return {"status":"created", "continent": {"name": req.get("name"), "info": req.get("info", ""), "is_continent": True}}, 201
     return {"error": "Missing name from continent"}, 415
 
 
-#requires name, continent_name, optional interest_areas
+#requires name, continent_name, optional interest_areas, info
 @app.post("/api/world/city")
 def add_city():
     req = request.json
@@ -94,7 +94,7 @@ def add_city():
     return {"error": "Missing name from continent"}, 415
 
 #requires name, continent_name, optional interest_areas
-@app.post("/api/world/npcs")
+@app.post("/api/world/npc")
 def add_npc():
     req = request.json
     if req.get("name"):
@@ -163,5 +163,5 @@ def direct_to_npc(get_npc):
 # TODO add extra routes for NPCs, add NPCs to cities, could be a patch route for cities to add them, same with continents.
         
 
-if __name__ == "__main__":
-    app.run(port=10000, host="0.0.0.0")
+# if __name__ == "__main__":
+    # app.run(port=10000, host="0.0.0.0")
