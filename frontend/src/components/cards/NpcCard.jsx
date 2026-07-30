@@ -6,8 +6,14 @@ export default function NpcCard({ npc, inDepth }) {
   const navigate = useNavigate();
   return (
     <div
-      onClick={() => navigate(`/npcs/${npc?.name}`)}
-      className={baseCardClasses.join(" ")}
+      onClick={() => {
+        inDepth ? "" : navigate(`/npcs/${npc?.name}`);
+      }}
+      className={
+        inDepth
+          ? baseCardClasses.join(" ") + " cursor-default"
+          : baseCardClasses.join(" ") + " cursor-pointer"
+      }
     >
       <h2 className="text-4xl bg-white text-black border border-black px-4 py-2">
         {npc?.name || "Loading..."}
@@ -15,7 +21,12 @@ export default function NpcCard({ npc, inDepth }) {
       <p className="text-2xl text-white">
         Info: {npc.info?.replaceAll('"', "")}
       </p>
-      {inDepth && <p className="text-2xl text-white">City: {npc?.city}</p>}
+      <h3 className="text-2xl text-center w-full bg-gray-600">NPCs</h3>
+      {inDepth && (
+        <Link to={`/cities/${npc.city}`}>
+          <p className="text-2xl text-white">City: {npc?.city}</p>
+        </Link>
+      )}
     </div>
   );
 }

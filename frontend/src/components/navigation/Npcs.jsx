@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import NpcCard from "../cards/NpcCard";
 import { FLASK_GET_NPCS_URL } from "../../helpers/consts";
+import {
+  cardContainerClasses,
+  cardContainerClassesSmall,
+} from "../../helpers/htmlClasses";
 
 export default function Npcs() {
   async function getNpcs() {
@@ -19,8 +23,14 @@ export default function Npcs() {
   useEffect(() => {
     getNpcs();
   }, []);
-  return (
-    <div className="grid grid-cols-3 gap-2 min-h-[90vh] z-10 p-4 justify-center items-center bg-black w-[80vw] [border-style:groove] mx-auto border-4 border-white">
+  return npcs.length > 4 ? (
+    <div className={cardContainerClasses.join(" ")}>
+      {npcs.map((npc) => {
+        return <NpcCard key={npc.id} npc={npc} />;
+      })}
+    </div>
+  ) : (
+    <div className={cardContainerClassesSmall.join(" ")}>
       {npcs.map((npc) => {
         return <NpcCard key={npc.id} npc={npc} />;
       })}

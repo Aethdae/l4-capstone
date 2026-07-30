@@ -22,8 +22,6 @@ export default function Npc() {
     grabNpc();
   }, []);
   return (
-    <div>
-      <NpcCard npc={npc} inDepth={true} />
-    </div>
+    <div>{npc.name?.length > 0 && <NpcCard npc={npc} inDepth={true} />}</div>
   );
 }

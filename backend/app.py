@@ -112,13 +112,15 @@ def add_npc():
 @app.get("/api/continents/<string:get_cont>")
 def direct_to_continent(get_cont):
     with Session(engine) as session:
-        continent = session.execute(text("SELECT id, name FROM continents WHERE name = :name"), {"name": get_cont}).first()
+        continent = session.execute(text("SELECT id, name, info FROM continents WHERE name = :name"), {"name": get_cont}).first()
         if continent:
             continent = continent._asdict()
             cities = session.execute(text("SELECT name FROM cities WHERE continent_id = :id"), {"id": continent["id"]}).all()
             cities_ret = [cities[i][0] for i in range(len(cities))]
 
-            return {"continent": {"name": continent["name"], "continent_id": continent["id"], "cities": cities_ret}}, 200
+            continent["cities"] = cities_ret
+
+            return {"result": "success", "continent": continent}, 200
         
         return {"error": f"Continent with name: {get_cont} not found."}, 404
         

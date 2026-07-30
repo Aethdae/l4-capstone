@@ -12,8 +12,10 @@ export default function City() {
       if (!res.ok) {
         throw new Error("Failed to get city!");
       }
-      const { city } = await res.json();
-      setCity(city);
+      const data = await res.json();
+      if (data.city) {
+        setCity(data.city);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -23,7 +25,7 @@ export default function City() {
   }, []);
   return (
     <div>
-      <CityCard city={city} inDepth={true} />
+      {city.name?.length > 0 && <CityCard city={city} inDepth={true} />}
     </div>
   );
 }

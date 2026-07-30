@@ -70,7 +70,6 @@ export default function AddCityForm({ setCreated, itemCreated }) {
     });
   }
 
-  //TODO Add info input
   return (
     <section className={formContainerClasses.join(" ")}>
       {console.log(formState)}

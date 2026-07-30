@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FLASK_GET_CONTINENTS_URL } from "../../helpers/consts";
 import ContinentCard from "../cards/ContinentCard";
+import {
+  cardContainerClasses,
+  cardContainerClassesSmall,
+} from "../../helpers/htmlClasses";
 
 export default function Continents() {
   const [conts, setConts] = useState([]);
@@ -19,8 +23,14 @@ export default function Continents() {
   useEffect(() => {
     getCities();
   }, []);
-  return (
-    <div className="grid grid-cols-2 min-h-[90vh] z-10 justify-center p-4 items-center bg-black w-[80vw] [border-style:groove] mx-auto border-4 border-white">
+  return conts.length > 4 ? (
+    <div className={cardContainerClasses.join(" ")}>
+      {conts.map((cont) => (
+        <ContinentCard key={cont.id} continent={cont} />
+      ))}
+    </div>
+  ) : (
+    <div className={cardContainerClassesSmall.join(" ")}>
       {conts.map((cont) => (
         <ContinentCard key={cont.id} continent={cont} />
       ))}

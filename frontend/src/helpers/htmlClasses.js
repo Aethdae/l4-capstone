@@ -110,7 +110,6 @@ export const baseCardClasses = [
   "border-2",
   "rounded-2xl",
   "p-20",
-  "cursor-pointer",
 ];
 
 export const formContainerClasses = [
@@ -122,6 +121,59 @@ export const formContainerClasses = [
   "w-[50vw]",
   "items-center",
   "[border-style:groove]",
+  "border-4",
+  "border-white",
+];
+
+export const ulListClasses = [
+  "grid",
+  "grid-cols-2",
+  "gap-4",
+  "bg-gray-500",
+  "w-full",
+  "mx-auto",
+  "p-4",
+];
+
+export const liListClasses = [
+  "bg-white",
+  "p-2",
+  "text-black",
+  "text-center",
+  "border",
+  "border-black",
+  "rounded-xl",
+];
+
+export const cardContainerClasses = [
+  "grid",
+  "grid-cols-2",
+  "min-h-[90vh]",
+  "z-10",
+  "justify-center",
+  "p-4",
+  "items-center",
+  "bg-black",
+  "w-[80vw]",
+  "[border-style:groove]",
+  "mx-auto",
+  "border-4",
+  "border-white",
+];
+
+export const cardContainerClassesSmall = [
+  "flex",
+  "flex-col",
+  "mx-auto",
+  "min-h-[90vh]",
+  "z-10",
+  "justify-center",
+  "p-4",
+  "items-center",
+  "bg-black",
+  "w-[80vw]",
+  "[border-style:groove]",
+  "mx-auto",
   "border-4",
   "border-white",
 ];
