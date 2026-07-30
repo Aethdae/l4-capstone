@@ -10,23 +10,18 @@ import {
 import { upperFirstLetter } from "../../helpers/helperFunctions";
 
 export default function AddCityForm({ setCreated, itemCreated }) {
-  const intAreas = useRef([""]);
-  const intElements = [];
   const [continents, setContinents] = useState([]);
-  const [name, setName] = useState("");
-  const [selectedContinent, setSelectedContinent] = useState("");
-  const [renderState, setRenderState] = useState("");
-  const [interestAreaElements, setInterestAreaElements] = useState([{}]);
+  const [interestAreaElements, setInterestAreaElements] = useState([]);
+  const [formState, setFormState] = useState(() => ({
+    name: "",
+    selectedContinent: "",
+    interestAreas: [createInterestArea()],
+    info: "",
+  }));
 
   useEffect(() => {
     getContinents();
   }, []);
-
-  useEffect(() => {
-    intElements.forEach((element, i) => {
-      document.getElementById(element).value = intAreas.current[i] || "";
-    });
-  }, [renderState]);
 
   async function getContinents() {
     try {
@@ -37,24 +32,48 @@ export default function AddCityForm({ setCreated, itemCreated }) {
       console.error(error);
     }
   }
-  function handleAreaChange(e, index) {
-    e.preventDefault();
-    intAreas.current[index] = e.target.value;
+
+  function handleFormChange(e) {
+    setFormState((prev) => {
+      const { name, value } = e.target;
+      return { ...prev, [name]: value };
+    });
   }
+
+  function handleAreaChange(e, id) {
+    setFormState((prev) => {
+      const newInterestAreas = prev.interestAreas.map((area) => {
+        return area.id === id ? { ...area, value: e.target.value } : area;
+      });
+      return { ...prev, interestAreas: newInterestAreas };
+    });
+  }
+
+  function createInterestArea() {
+    return {
+      id: crypto.randomUUID(),
+      value: "",
+    };
+  }
+
   function addInterestArea() {
-    setInterestAreaElements(() => [...interestAreaElements, { area: "" }]);
+    setFormState((prev) => ({
+      ...prev,
+      interestAreas: [...prev.interestAreas, createInterestArea()],
+    }));
   }
+
   async function handleSubmitForm(e) {
     e.preventDefault();
     console.log("Submitted nothing atm PH", {
       name,
-      selectedContinent,
-      intAreas,
     });
   }
 
+  //TODO Add info input
   return (
     <section className={formContainerClasses.join(" ")}>
+      {console.log(formState)}
       <form
         onSubmit={(e) => {
           handleSubmitForm(e);
@@ -69,22 +88,13 @@ export default function AddCityForm({ setCreated, itemCreated }) {
             type="text"
             name="name"
             id="name"
-            value={name}
-            onChange={(e) => {
-              setName((prev) => e.target.value);
-              setRenderState(crypto.randomUUID());
-            }}
+            value={formState.name}
+            onChange={handleFormChange}
           ></input>
         </label>
-        {interestAreaElements.map((item, i) => {
-          if (!intElements.includes("area-" + i)) {
-            intElements.push("area-" + i);
-          }
+        {formState.interestAreas.map((area, i) => {
           return (
-            <label
-              key={crypto.randomUUID()}
-              className={formLabelClasses.join(" ")}
-            >
+            <label key={area.id} className={formLabelClasses.join(" ")}>
               Area
               <input
                 className={textFormInputClasses.join(" ")}
@@ -93,23 +103,33 @@ export default function AddCityForm({ setCreated, itemCreated }) {
                 id={"area-" + i}
                 onChange={(e) => {
                   e.preventDefault();
-                  handleAreaChange(e, i);
+                  handleAreaChange(e, area.id);
                 }}
+                value={formState.interestAreas[i].value}
               ></input>
             </label>
           );
         })}
         <label className={formLabelClasses.join(" ")}>
-          City
+          Info
+          <input
+            className={textFormInputClasses.join(" ")}
+            aria-required
+            type="text"
+            name="info"
+            id="info"
+            value={formState.info}
+            onChange={handleFormChange}
+          ></input>
+        </label>
+        <label className={formLabelClasses.join(" ")}>
+          Continent
           <select
             className={formSelectClasses.join(" ")}
-            value={selectedContinent}
-            onChange={(e) => {
-              setSelectedContinent(e.target.value);
-              setRenderState(crypto.randomUUID());
-            }}
-            name="city"
-            id="city"
+            value={formState.selectedContinent}
+            onChange={handleFormChange}
+            name="continent"
+            id="continent"
           >
             <option value="">Select a continent</option>
             {continents.map((continent) => (
@@ -123,7 +143,6 @@ export default function AddCityForm({ setCreated, itemCreated }) {
           type="button"
           onClick={(e) => {
             addInterestArea();
-            setRenderState(crypto.randomUUID());
           }}
         >
           Add area

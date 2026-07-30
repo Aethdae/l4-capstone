@@ -12,7 +12,8 @@ export default function ContinentCard({ continent, inDepth }) {
       <h2 className="text-4xl bg-white text-black border border-black px-4 py-2">
         {continent?.name || "Loading..."}
       </h2>
-      {continent.info?.length > 0 && <p>Info: {continent.info}</p>}
+
+      {inDepth && continent.info?.length > 0 && <p>Info: {continent.info}</p>}
     </div>
   );
 }
