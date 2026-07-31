@@ -3,4 +3,19 @@
 :root {
   background-color: #222;
   color: white;
+  font-family: "Iceberg", sans-serif;
+}
+
+@theme {
+  --animate-roll: roll 3s ease-in-out;
+  @keyframes roll {
+    0% {
+      left: 100%;
+      transform: rotate(4deg);
+    }
+    100% {
+      left: 45.5%;
+      transform: rotate(-1080deg);
+    }
+  }
 }

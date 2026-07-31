@@ -1,5 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FLASK_URL } from "../../helpers/consts";
+import { homePageCardClasses } from "../../helpers/htmlClasses";
+import etoril from "../../assets/etoril.jpg";
+import d20 from "../../assets/d20.png";
+import { Link } from "react-router";
 
 export default function HomePage() {
   async function pingBackend() {
@@ -9,17 +13,74 @@ export default function HomePage() {
     pingBackend();
   }, []);
   return (
-    <div className="flex flex-col min-h-[90vh] z-10 justify-around items-center bg-black w-[80vw] [border-style:groove] mx-auto border-4 border-white">
-      <section className="min-h-[70vh]">
-        <h2>Managing a world in any TTRPG is a difficult and arduous task.</h2>
-        <p>Keeping track of locations, NPCs, events, etc.</p>
-        <p>While this is not a solution, but a helpful tool along the way.</p>
+    <div className="flex flex-col min-h-[90vh] gap-10 z-10 justify-around items-center bg-black w-[80vw] [border-style:groove] mx-auto border-4 border-white">
+      <section
+        style={{
+          backgroundImage: `url(${etoril})`,
+          backgroundOrigin: "border-box",
+          backgroundPosition: "75%",
+        }}
+        className={
+          homePageCardClasses.join(" ") + " min-h-[60vh] bg-red-400/30"
+        }
+      >
+        <h2 className="text-4xl bg-black/70 w-full text-center py-6">
+          Managing a world in any TTRPG is a difficult and arduous task.
+        </h2>
+        <p className="text-4xl bg-black/70 w-full text-center py-6">
+          Keeping track of all the locations is a large burden on the mind.
+        </p>
+        <p className="text-4xl bg-black/70 w-full text-center py-6">
+          This small app alleviates part of that information overload, making
+          the world be easy to navigate through.
+        </p>
       </section>
-      <section className="min-h-[70vh]">
-        You can manage PF/DND worlds here
+
+      <section className={homePageCardClasses.join(" ") + " min-h-[40vh]"}>
+        <img
+          className={`animate-roll absolute`}
+          src={d20}
+          alt="twenty-sided die"
+        />
       </section>
-      <section className="min-h-[70vh]">
-        Create things on manage page :gothere:
+
+      <section className={homePageCardClasses.join(" ") + " min-h-[60vh]"}>
+        <div className="bg-gray-700 shadow-white shadow-lg/40 px-20 py-20 flex flex-col gap-10 rounded-xl rounded-bl-4xl rounded-tr-4xl">
+          <h2 className="text-4xl underline-offset-8 underline text-center">
+            View created resources
+          </h2>
+          <div className="flex gap-10">
+            <Link
+              className="px-10 py-4 bg-black border-2 [border-style:groove] border-white text-2xl hover:bg-white hover:text-black transition-all duration-100"
+              to={"/continents"}
+            >
+              Continents
+            </Link>
+            <Link
+              className="px-10 py-4 bg-black border-2 [border-style:groove] border-white text-2xl hover:bg-white hover:text-black transition-all duration-100"
+              to={"/cities"}
+            >
+              Cities
+            </Link>
+            <Link
+              className="px-10 py-4 bg-black border-2 [border-style:groove] border-white text-2xl hover:bg-white hover:text-black transition-all duration-100"
+              to={"/npcs"}
+            >
+              NPCs
+            </Link>
+          </div>
+        </div>
+        <div className="bg-gray-700 shadow-white shadow-lg/40 px-40 py-20 flex flex-col gap-10 rounded-xl rounded-bl-4xl rounded-tr-4xl">
+          <h2 className="text-4xl underline-offset-8 underline text-center">
+            Create more entries
+          </h2>
+          <Link
+            className="py-4 text-center bg-black border-2 [border-style:groove] border-white text-2xl hover:bg-white hover:text-black transition-all duration-100"
+            to={"/management"}
+          >
+            Manage
+          </Link>
+        </div>
       </section>
     </div>
   );

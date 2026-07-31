@@ -72,11 +72,12 @@ export default function AddCityForm({ setCreated, itemCreated }) {
   async function handleSubmitForm(e) {
     e.preventDefault();
     try {
+      const areas = formState.interestAreas.map((item) => item.value);
       const res = await fetch(FLASK_PUT_CITIES_URL, {
         headers: { "Content-Type": "application/json" },
         method: "POST",
         body: JSON.stringify({
-          interest_areas: formState.interestAreas,
+          interest_areas: areas,
           name: formState.name,
           info: formState.info,
           continent_name: formState.selectedContinent,

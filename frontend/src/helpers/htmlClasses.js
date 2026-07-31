@@ -7,6 +7,21 @@ export const formLabelClasses = [
   "font-bold",
 ];
 
+export const homePageCardClasses = [
+  "w-[90%]",
+  "flex",
+  "flex-col",
+  "gap-8",
+  "border-white",
+  "bg-gray-900/80",
+  "shadow-white",
+  "shadow-md/70",
+  "px-10",
+  "py-8",
+  "items-center",
+  "justify-around",
+];
+
 export const formSelectClasses = ["bg-black", "text-white", "mx-auto"];
 
 export const textFormInputClasses = [

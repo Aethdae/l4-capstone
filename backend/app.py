@@ -3,11 +3,14 @@ from flask_cors import CORS
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session
 from psycopg2.extras import Json
+from dotenv import load_dotenv
+import os;
 
+load_dotenv()
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:*", "http://127.0.0.1:*"])
 
-engine = create_engine("postgresql://pathfinder_world_user:UeXoSdrd1B47UxcC5DdUvl24lxnk7L7b@dpg-d9hunoo4n6ts73bj3i60-a.ohio-postgres.render.com/pathfinder_world")
+engine = create_engine(os.getenv("PG_DB"))
 
 @app.route("/")
 def home():
@@ -163,5 +166,5 @@ def direct_to_npc(get_npc):
 # TODO add extra routes for NPCs, add NPCs to cities, could be a patch route for cities to add them, same with continents.
         
 
-# if __name__ == "__main__":
-    # app.run(port=10000, host="0.0.0.0")
+if __name__ == "__main__":
+    app.run(port=10000, host="0.0.0.0")

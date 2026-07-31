@@ -22,6 +22,10 @@ export default function Npc() {
     grabNpc();
   }, []);
   return (
-    <div>{npc.name?.length > 0 && <NpcCard npc={npc} inDepth={true} />}</div>
+    <div className="flex flex-col min-h-[40vh] gap-10 z-10 justify-around items-center bg-black w-[80vw] [border-style:groove] mx-auto border-4 border-white">
+      <div className="w-[80%] mx-auto py-10">
+        {npc.name?.length > 0 && <NpcCard npc={npc} inDepth={true} />}
+      </div>
+    </div>
   );
 }
