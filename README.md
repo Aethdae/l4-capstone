@@ -46,8 +46,12 @@ city_id bigint REFERENCES cities(id))
 - Add additional items in each section for full creation
 - Fix stylings to meet more strict standards
 
-#### Links (may drop due to inactivity)
+## Links (may drop due to inactivity)
 
 Frontend: https://d1djrxu4u71ipd.cloudfront.net
 
+Hosted on Cloudfront using an S3 bucket for storage
+
 Backend: https://l4-capstone.onrender.com
+
+Hosted on Render
