@@ -8,7 +8,7 @@ import os;
 
 load_dotenv()
 app = Flask(__name__)
-CORS(app, origins=["https://d1djrxu4u71ipd.cloudfront.net/"])
+CORS(app, origins=["https://d1djrxu4u71ipd.cloudfront.net"])
 
 engine = create_engine(os.getenv("PG_DB"))
 
