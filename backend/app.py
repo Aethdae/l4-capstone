@@ -77,7 +77,7 @@ def add_continent():
             session.execute(text("INSERT INTO continents (name, info) VALUES (:name, :info)"), {"name": req.get("name"), "info": req.get("info", None)})
             session.commit()
             return {"status":"created", "continent": {"name": req.get("name"), "info": req.get("info", ""), "is_continent": True}}, 201
-    return {"error": "Missing name from continent"}, 415
+    return {"error": "Missing name from continent"}, 404
 
 
 #requires name, continent_name, optional interest_areas, info
@@ -94,7 +94,7 @@ def add_city():
             else: 
                 return {"error": f"Continent with name: {req.get("continent_name")} not found."}, 404
             
-    return {"error": "Missing name from continent"}, 415
+    return {"error": "Missing name from city"}, 404
 
 #requires name, continent_name, optional interest_areas
 @app.post("/api/world/npc")
@@ -110,7 +110,7 @@ def add_npc():
             else: 
                 return {"error": f"Continent with name: {req.get("city_name")} not found."}, 404
             
-    return {"error": "Missing name from continent"}, 415
+    return {"error": "Missing name from continent"}, 404
 
 @app.get("/api/continents/<string:get_cont>")
 def direct_to_continent(get_cont):
@@ -162,8 +162,6 @@ def direct_to_npc(get_npc):
             return {"result": "success", "npc": npc }, 200
         
         return {"error": f"City with name: {get_npc} not found."}, 404
-
-# TODO add extra routes for NPCs, add NPCs to cities, could be a patch route for cities to add them, same with continents.
         
 
 if __name__ == "__main__":
